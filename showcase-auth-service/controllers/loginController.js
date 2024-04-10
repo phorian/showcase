@@ -7,7 +7,7 @@ const userLogin = async (req, role, res) => {
 
     //Username and password input check
     if( !username || !password ) {
-        return res.status(400).json({'message': 'Input Username and Passrowd'});
+        return res.status(400).json({'message': 'Input Username and Password'});
     }
 
     //Check if user exists
@@ -16,13 +16,13 @@ const userLogin = async (req, role, res) => {
         return res.sendStatus(401); 
     }
 
-    //Check user role and route used
+    /* Check user role and route used
     if(searchUser.role !== role) {
         return res.status(403).json({
             message: "Please Make sure you are signing in from the right Entry",
             success: false,
         });
-    }
+    }*/
 
     //Check password input
     const matchpwd = await bcrypt.compare(password, searchUser.password)
@@ -55,7 +55,8 @@ const userLogin = async (req, role, res) => {
        console.log(result);
        res.json({ accessToken });
        return res.status(200).json({
-        ...result, 
+        status: 'success',
+        token,
         message: "You are logged in.",
        })
         

@@ -1,5 +1,7 @@
+//const verifyJWT = require("../middleware/verifyJWT");
 const User = require("../models/User");
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.createNewUser = async (req, res, next) => {
     const {username, firstname, lastname, password, email} = req.body;
@@ -25,8 +27,6 @@ exports.createNewUser = async (req, res, next) => {
     }
 
     try {
-        //encrypt password 
-        
         //create and store the new user
         const newUser = await User.create(
             req.body,
@@ -40,9 +40,20 @@ exports.createNewUser = async (req, res, next) => {
 
         );
 
-        console.log(newUser)
+        //console.log(newUser)
 
-        res.status(201).json({'success': `New user ${username} created`});
+        const token = jwt.sign({id: newUser._id}, process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.JWT_EXP
+        })
+
+        res.status(201).json({
+            status: 'success',
+            token,
+            data: {
+                newUser,
+            },
+        });
 
     } catch (err){
         res.status(500).json({'message': err.message})
