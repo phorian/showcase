@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const userSchema = new Schema ({
     username: {
@@ -17,10 +18,17 @@ const userSchema = new Schema ({
         type: String,
         required: [true, 'Please enter your lastname.']
     },
+    role: {
+        type: String,
+        enum: [ "User", "Brand", "Vendor"],
+        default: 'User',
+        required: true
+    },
     password: {
         type: String,
         minlength: 6,
-        required: [true, 'Please enter password']
+        required: [true, 'Please enter password'],
+        select: false
     },
     email: {
         type: String,
@@ -29,13 +37,11 @@ const userSchema = new Schema ({
         lowercase: true,
         validate: [ validator.isEmail, 'Please enter a valid email.']
     },
-    role: {
-        type: String,
-        enum: [ "User", "Brand", "Vendor"],
-        required: true,
-    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetTokenExp: Date
 },
-    {timestamps: true}
+    {timestamps: true},
 
 );
 
@@ -47,5 +53,31 @@ userSchema.pre('save', async function(next){
     next();
 
 })
+
+userSchema.methods.matchPassword = async function(password,userPassword ) {
+    return await bcrypt.compare(password,userPassword);  
+}
+
+userSchema.methods.isPasswordChanged = async function (JWTTimestamp) {
+    if(this.passwordChangedAt){
+        const changedpasswordTimestamp = parseInt(this.passwordChangedAt.getTime() % 1000, 10);
+        console.log(changedpasswordTimestamp, JWTTimestamp)
+
+        return JWTTimestamp < changedpasswordTimestamp;
+    }
+    return false;
+
+}
+
+
+userSchema.methods.createResetPasswordToken = function() {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    //encrypt
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.passwordResetTokenExp = Date.now() + 10 * 60 * 1000;
+
+    return resetToken;
+}
 
 module.exports = mongoose.model ('User', userSchema)

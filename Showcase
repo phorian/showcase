@@ -1,0 +1,47 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "ShowcaseAuth",
+    "dateExported": "2024-04-14T16:15:17.243Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "d6c7bf02-fb89-4c96-8d5f-70cd6cd6f3d2",
+            "colId": "d6cd62c2-1832-44e3-a1ba-abef64f4b408",
+            "containerId": "",
+            "name": "create user",
+            "url": "http://localhost:9999/Register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-04-06T19:11:42.949Z",
+            "modified": "2024-04-12T11:10:20.150Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"Drene\",\n  \"firstname\": \"Opeyemi\",\n  \"lastname\": \"Jinad\",\n  \"password\": \"Gantet\",\n  \"email\": \"drene@gmail.com\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "5aa04296-bcc5-4814-944d-3681226fa841",
+            "colId": "d6cd62c2-1832-44e3-a1ba-abef64f4b408",
+            "containerId": "",
+            "name": "login",
+            "url": "http://localhost:9999/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-04-12T11:10:06.511Z",
+            "modified": "2024-04-12T11:10:06.511Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"drene@gmail.com\",\n   \"password\": \"Gantet\"\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}

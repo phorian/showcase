@@ -30,5 +30,5 @@ process.on("unhandledRejection", err => {
 //json middleware
 app.use(express.json());
 
-app.use('/register', require("./showcase-auth-service/routes/register"));
-app.use('/login', require("./showcase-auth-service/routes/login"));
+app.use('/', require("./showcase-auth-service/routes/authRouter"));
+app.use('/', require("./showcase-auth-service/routes/authRouter"));

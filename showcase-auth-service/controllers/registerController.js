@@ -1,6 +1,5 @@
-//const verifyJWT = require("../middleware/verifyJWT");
 const User = require("../models/User");
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.createNewUser = async (req, res, next) => {

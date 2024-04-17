@@ -1,17 +1,28 @@
 const User = require("../models/User");
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const userLogin = async (req, role, res) => {
-    const {username, password} = req.body;
+
+//JWT Sign function ----> Reusable
+
+const signToken = id => {
+
+     return jwt.sign({id}, process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.JWT_EXP
+        })
+}
+
+const userLogin = async (req, res) => {
+    const {email, password} = req.body;
 
     //Username and password input check
-    if( !username || !password ) {
+    if( !email || !password ) {
         return res.status(400).json({'message': 'Input Username and Password'});
     }
 
     //Check if user exists
-    const searchUser = await User.findOne({username: username}).exec();
+    const searchUser = await User.findOne({ email }).select('+password');
     if(!searchUser) {
         return res.sendStatus(401); 
     }
@@ -25,10 +36,14 @@ const userLogin = async (req, role, res) => {
     }*/
 
     //Check password input
-    const matchpwd = await bcrypt.compare(password, searchUser.password)
+    const matchpwd = await searchUser.matchPassword(password, searchUser.password)
     if (matchpwd) {
        //Sign a token and issue to user if password match
-       const accessToken = jwt.sign(
+
+       const accessToken = signToken(searchUser._id);
+       
+       
+       /*jwt.sign(
         {
             "username": searchUser.username,
             "email": searchUser.email,
@@ -36,9 +51,9 @@ const userLogin = async (req, role, res) => {
         },
         process.env.ACCESS_TOKEN_SECRET,
         {expiresIn: '300s'}
-       );
+       ); */
 
-       const refreshToken = jwt.sign (
+       /*const refreshToken = jwt.sign ( 
         {
             "username": searchUser.username,
             "email": searchUser.email, 
@@ -47,16 +62,15 @@ const userLogin = async (req, role, res) => {
         },
         process.env.REFRESH_TOKEN_SECRET,
         {expiresIn: '1D'}
-       );
+       );*/
 
        //Save refreshToken with current user
-       searchUser.refreshToken = refreshToken;
+       //searchUser.refreshToken = refreshToken;
        const result = await searchUser.save();
        console.log(result);
-       res.json({ accessToken });
        return res.status(200).json({
         status: 'success',
-        token,
+        accessToken,
         message: "You are logged in.",
        })
         
