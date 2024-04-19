@@ -21,14 +21,14 @@ exports.verifyJWT = async (req, res, next) => {
     const user = await User.findById(decodedToken.id)
 
     if(!user){
-        return res.sendStatus(403); //invalid token
+        return res.sendStatus(401); //invalid token
         //next()
     }
 
-    const isPasswordChanged = user.isPasswordChanged(decodedToken.iat);
+    const isPasswordChanged = await user.isPasswordChanged(decodedToken.iat);
     // Verify for changed password after token was issued
     if (isPasswordChanged) {
-        return res.sendStatus(403);
+        return  next(res.status(401).json("Your password was changed, Please login again"));
         // next();
     }
 

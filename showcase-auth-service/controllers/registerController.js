@@ -46,7 +46,7 @@ exports.createNewUser = async (req, res, next) => {
             expiresIn: process.env.JWT_EXP
         })
 
-        res.status(201).json({
+        res.status(200).json({
             status: 'success',
             token,
             data: {

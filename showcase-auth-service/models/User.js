@@ -60,7 +60,7 @@ userSchema.methods.matchPassword = async function(password,userPassword ) {
 
 userSchema.methods.isPasswordChanged = async function (JWTTimestamp) {
     if(this.passwordChangedAt){
-        const changedpasswordTimestamp = parseInt(this.passwordChangedAt.getTime() % 1000, 10);
+        const changedpasswordTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
         console.log(changedpasswordTimestamp, JWTTimestamp)
 
         return JWTTimestamp < changedpasswordTimestamp;
