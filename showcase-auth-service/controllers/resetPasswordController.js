@@ -76,34 +76,3 @@ exports.resetPassword = async (req, res, next) => {
             logintoken
         });
 }
-
-
-exports.updatePassword = async (req, res, next) => {
-
-    //Get current user data from DB
-    const user = await User.findById(req.user._id).select('+password');
-
-
-    //Confirm Data {password}
-    if(!(await user.matchPassword(req.body.currentPassword, user.password))){
-        return res.status(401).json('The current password is not correct');
-    }
-    
-    //If correct, update password with new value
-    user.password = req.body.password, 
-    await user.save();
-
-    //Login and sign JWT
-    const token = jwt.sign({id: user._id}, process.env.ACCESS_TOKEN_SECRET,
-        {
-            expiresIn: process.env.JWT_EXP
-        })
-
-        res.status(200).json({
-            status: 'success',
-            token,
-            data: {
-                user
-            }
-        });
-}

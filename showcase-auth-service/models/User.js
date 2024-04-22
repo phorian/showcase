@@ -37,6 +37,12 @@ const userSchema = new Schema ({
         lowercase: true,
         validate: [ validator.isEmail, 'Please enter a valid email.']
     },
+    active: {
+        type: Boolean,
+        default: true,
+        select: false
+    },
+
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetTokenExp: Date
@@ -52,7 +58,7 @@ userSchema.pre('save', async function(next){
     this.password = await bcrypt.hash(this.password, 10);
     next();
 
-})
+}) 
 
 userSchema.methods.matchPassword = async function(password,userPassword ) {
     return await bcrypt.compare(password,userPassword);  
@@ -79,5 +85,11 @@ userSchema.methods.createResetPasswordToken = function() {
 
     return resetToken;
 }
+
+
+userSchema.pre(/^find/, function(next){
+    this.find({active: {$ne: false}});
+    next();
+})
 
 module.exports = mongoose.model ('User', userSchema)
