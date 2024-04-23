@@ -4,7 +4,7 @@ const rateLimit = require('express-rate-limit');
 //const bodyParser = require('body-parser')
 const app = express();
 const PORT = process.env.PORT || 9999
-const connectDB = require("./showcase-auth-service/config/db");
+const connectDB = require("./config/db");
 const server = app.listen(PORT, () => console.log(`Server connected to port ${PORT}`))
 
 //connecting the Database
@@ -40,5 +40,6 @@ app.use('/', limiter);
 //json middleware
 app.use(express.json());
 
-app.use('/', require("./showcase-auth-service/routes/authRouter"));
-app.use('/', require("./showcase-auth-service/routes/userRoute"));
+app.use('/', require("./routes/authRouter"));
+app.use('/', require("./routes/userRoute"));
+app.use('/', require("./routes/categoriesRouter"));

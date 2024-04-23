@@ -13,12 +13,12 @@ exports.createNewUser = async (req, res, next) => {
     //check for duplicate email in the db
     const duplicateEmail = await User.findOne({email: email}).exec();
     if(duplicateEmail)
-    return res.sendStatus(409); //conflict
+    return res.sendStatus(409); //conflict --> Existing email
 
      //check for duplicate username in the db
      const duplicateUsername = await User.findOne({username: username}).exec();
      if(duplicateUsername)
-     return res.sendStatus(409); //conflict
+     return res.sendStatus(409); //conflict --> Existing Username
 
     //check password length
     if (password.length < 6) {
@@ -46,7 +46,7 @@ exports.createNewUser = async (req, res, next) => {
             expiresIn: process.env.JWT_EXP
         })
 
-        res.status(200).json({
+        res.status(201).json({
             status: 'success',
             token,
             data: {
