@@ -4,32 +4,6 @@ const jwt = require('jsonwebtoken');
 //const crypto = require('crypto');
 
 
-
-exports.getAllBrands = async (req, res, next) => {
-    const brands = await User.find({role: 'Brand'});
-
-    next(res.status(200).json({
-        status: 'success',
-        result: brands.length,
-        data: {
-            brands
-        }
-    }));
-}
-
-exports.getAllVendors = async (req, res, next) => {
-    const vendors = await User.find({role: 'Vendor'});
-
-    next(res.status(200).json({
-        status: 'success',
-        result: vendors.length,
-        data: {
-            vendors
-        }
-    }));
-}
-
-
 const filterReqObj = (obj, ...allowedFields) => {
     const newObj = {};
     Object.keys(obj).forEach(prop => {

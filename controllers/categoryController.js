@@ -11,7 +11,7 @@ exports.createCategory = async (req, res) => {
     //Check for existing category
     const duplicateCategory = await Category.findOne({title: title}).exec();
     if(duplicateCategory){
-        return res.status(409); //conflict --> Existing Category
+        return res.sendStatus(409); //conflict --> Existing Category
     }
 
     try {
