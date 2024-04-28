@@ -44,3 +44,4 @@ app.use('/', require("./routes/authRouter"));
 app.use('/', require("./routes/userRoute"));
 app.use('/', require("./routes/categoriesRouter"));
 app.use('/', require("./routes/storeRouter"));
+app.use('/', require("./routes/productRoute"));

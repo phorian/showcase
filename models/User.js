@@ -37,6 +37,10 @@ const userSchema = new Schema ({
         lowercase: true,
         validate: [ validator.isEmail, 'Please enter a valid email.']
     },
+    city: {
+        type: String,
+        required: true
+    },
     active: {
         type: Boolean,
         default: true,

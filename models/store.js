@@ -14,10 +14,10 @@ const storeSchema = new Schema({
         type: String,
         required: true
     },
-    products: {
-        type: Array,
-        default: []
-    },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
     delivery: {
         type: Boolean,
         default: true
@@ -31,7 +31,7 @@ const storeSchema = new Schema({
         ref: 'User',
         required: true
     },
-    code: { //Might change to city or state --> When changed, remember to update in store controller :)
+    city: { //Might change to city or state --> When changed, remember to update in store controller :)
         type: String,
         required: true
     },

@@ -58,11 +58,11 @@ exports.getAllCategories = async (req, res) => {
 exports.getRandomCategories = async(req, res) => {
     try {
         let categories = await Category.aggregate([
-            {$match: {value: {$ne: "more"}}},
+            {$match: {value: {$ne: "More"}}},
             {$sample: {size: 5}}
         ]);
 
-        const moreCategory = await Category.findOne({value: "more"}, {__v: 0});
+        const moreCategory = await Category.findOne({value: "More"}, {__v: 0});
 
         if(moreCategory){
             categories.push(moreCategory)

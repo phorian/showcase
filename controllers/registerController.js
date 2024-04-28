@@ -3,10 +3,10 @@ const User = require("../models/User");
 const jwt = require('jsonwebtoken');
 
 exports.createNewUser = async (req, res, next) => {
-    const {username, firstname, lastname, password, email} = req.body;
+    const {username, firstname, lastname, password, email, city} = req.body;
 
     //check if username or password has been input
-    if(!username || !password || !email || !firstname || !lastname) {
+    if(!username || !password || !email || !firstname || !lastname || !city) {
         return res.status(400).json({'message': 'Input all fields'})
     }
 

@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 
 exports.createStore = async (req, res) => {
-    const { title, time, imageUrl, owner, code, logoUrl } = req.body;
+    const { title, time, imageUrl, owner, city, logoUrl } = req.body;
 
     //const user = await User.findById(userId);
 
@@ -11,7 +11,7 @@ exports.createStore = async (req, res) => {
         return res.status(401).send('Unauthorized: Only brands and Vendors can create stores.');
     }*/
 
-    if( !title || !time || !imageUrl || !code || !logoUrl) {
+    if( !title || !time || !imageUrl || !city || !logoUrl) {
         return res.status(400).json({
             status: false,
             message: 'Input all fields'});
@@ -23,10 +23,11 @@ exports.createStore = async (req, res) => {
             time,
             imageUrl,
             owner: req.user._id,
-            code,
+            city,
             logoUrl
     });
         await newStore.save();
+
 
         res.status(201).json({
             status: true,
@@ -64,15 +65,16 @@ exports.getStore = async (req, res) => {
 
 exports.getNearbyStore = async (req, res) => { //Homescreen with products --> Stores around you
     
-    const code = req.params.code;
+    const city = req.params.city;
 
     try {
 
         let nearbyStore = [];
 
-        if(code){
+        if(city){
             nearbyStore = await Store.aggregate([
-                {$match: {code: code, isAvailable: true}},
+                {$match: {city: city, isAvailable: true}},
+                {$sample: {size: 5}},
                 {$project: {__v: 0}}
             ])
         }
@@ -80,6 +82,7 @@ exports.getNearbyStore = async (req, res) => { //Homescreen with products --> St
         if(nearbyStore === 0){
             nearbyStore = await Store.aggregate([
                 {$match: {isAvailable: true}},
+                {$sample: {size: 5}},
                 {$project: {__v: 0}}
             ])
         }
