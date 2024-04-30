@@ -12,6 +12,7 @@ connectDB();
 
 
 
+
 /* 
 Built-in middleware to handle urlencoded data
 in other words, form data:
@@ -45,3 +46,4 @@ app.use('/', require("./routes/userRoute"));
 app.use('/', require("./routes/categoriesRouter"));
 app.use('/', require("./routes/storeRouter"));
 app.use('/', require("./routes/productRoute"));
+app.use('/', require("./routes/ratingRoute"));

@@ -24,7 +24,7 @@ const userLogin = async (req, res) => {
     //Check if user exists
     const searchUser = await User.findOne({ email }).select('+password');
     if(!searchUser) {
-        return res.sendStatus(401); 
+        return res.status(400).json({status: false, message: 'User not found'}); 
     }
 
     /* Check user role and route used
@@ -66,12 +66,16 @@ const userLogin = async (req, res) => {
 
        //Save refreshToken with current user
        //searchUser.refreshToken = refreshToken;
+
        const result = await searchUser.save();
-       console.log(result);
+       //console.log(result);
        return res.status(200).json({
         status: 'success',
         accessToken,
         message: "You are logged in.",
+        data: {
+            result
+        }
        })
         
     } else {

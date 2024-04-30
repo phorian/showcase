@@ -34,8 +34,27 @@ const userSchema = new Schema ({
         type: String,
         unique: true,
         required: [true, 'Please enter email.'],
+        unique: true,
         lowercase: true,
         validate: [ validator.isEmail, 'Please enter a valid email.']
+    },
+    otp: {
+        type: String,
+        required: false,
+        default: "none"
+    },
+    verification: {
+        type: Boolean,
+        default: false
+    },
+    phone: {
+        type: String,
+        default: "0123456789"
+    },
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        reg: "Address",
+        require: false
     },
     city: {
         type: String,

@@ -15,10 +15,11 @@ const sendEmail = async (option) => {
 
     // DEFINE EMAIL OPTIONS
     const emailOptions = {
-        from: 'Showcase Support<support@showcase.com>',
+        from: 'Showcase Support<support@showcase.com>', //update before prod
         to: option.email,
         subject: option.subject,
         text: option.message
+        //html: format in exchange for text 
     }
 
     await transporter.sendMail(emailOptions);

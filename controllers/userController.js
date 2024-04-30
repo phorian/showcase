@@ -72,3 +72,37 @@ exports.deleteUser = async (req, res, next) => {
         data: null
     });
 }
+
+exports.verifyAccount = async (req, res) => {
+    const userOtp = req.params.otp
+
+    try {
+        const user = await User.findById(req.user.id); 
+
+        if(!user){
+            return res.status(400).json({
+                status: false,
+                message: 'User not found'
+            });
+        }
+        if(userOtp === user.otp){
+            user.verification = true;
+            user.otp = "none";
+
+            await user.save();
+
+            const{password, __v, otp, ...others} = user._doc;
+            return res.status(200).json({...others})
+        } else {
+            return res.status(400).json({
+                status: false,
+                message: 'Wrong OTP'
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            status: false,
+            message: err.message
+        });
+    }
+}
