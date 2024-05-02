@@ -47,3 +47,5 @@ app.use('/', require("./routes/categoriesRouter"));
 app.use('/', require("./routes/storeRouter"));
 app.use('/', require("./routes/productRoute"));
 app.use('/', require("./routes/ratingRoute"));
+app.use('/', require("./routes/addressRoute"));
+app.use('/', require("./routes/cartRouter"));
