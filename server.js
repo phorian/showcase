@@ -49,3 +49,4 @@ app.use('/', require("./routes/productRoute"));
 app.use('/', require("./routes/ratingRoute"));
 app.use('/', require("./routes/addressRoute"));
 app.use('/', require("./routes/cartRouter"));
+app.use('/', require("./routes/orderRouter"));
