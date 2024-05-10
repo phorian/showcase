@@ -1,5 +1,7 @@
 const Store = require("../models/store");
 const User = require("../models/User");
+const Product = require('../models/product');
+const product = require("../models/product");
 
 
 exports.createStore = async (req, res) => {
@@ -184,3 +186,44 @@ exports.getStoresByVendor = async (req, res) => {
     }
 
 }
+
+exports.disableStore = async (req, res) => { //Disable store and delete after 30days
+
+    const userId = req.user._id;
+
+    try {
+
+        const store = await Store.findOne({owner: userId});
+
+        if(!store){
+            return  res.status(404).json({
+                status: 'false',
+                message: "You don't have access to this store"
+            });
+        }
+
+        //Deactivate store
+        store.isAvailable = false;
+        store.deactivationDate = new Date();
+        await store.save();
+
+        //Deactivate all products in store
+        await Product.updateMany({store: store._id}, { 
+            $set: { isAvailable: false},
+            $set: {deactivationDate: new Date()}
+        });
+
+        res.status(200).json({
+            status: 'True',
+            message: "Store and associated products disabled. Store and associated products will be permanently deleted in 30days"
+        });
+        
+    } catch (err) {
+        res.status(500).json({
+            status: 'false',
+            message: err.message
+        });
+    }
+}
+
+//Update Store

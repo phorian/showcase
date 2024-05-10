@@ -5,7 +5,8 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 9999
 const connectDB = require("./config/db");
-const server = app.listen(PORT, () => console.log(`Server connected to port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`Server connected to port ${PORT}`));
+const deleteStoreAndProductCron = require('./middleware/Cronservice');
 
 //connecting the Database
 connectDB();
@@ -24,6 +25,10 @@ process.on("unhandledRejection", err => {
     console.log(`An error occuured: ${err.message}`)
     server.close(() => process.exit(1));
 })
+
+//Cron task
+deleteStoreAndProductCron();
+console.log('Cron started');
 
 //Rate limit middleware
 

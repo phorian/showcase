@@ -56,7 +56,12 @@ const productSchema = new Schema({
     imageUrl: {
         type: Array,
         required: true
+    },
+    deactivationDate: {
+        type: Date
     }
-})
+},
+    {timestamps: true},
+)   
 
 module.exports = mongoose.model('Product', productSchema);

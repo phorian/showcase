@@ -6,9 +6,9 @@ const User = require("../models/User");
 
 
 exports.addProduct = async (req,res) => {
-const {title, description, productTags, productType, category, city, price, imageUrl} = req.body
+const {title, description, productTags, productType, category, city, price, imageUrl, size} = req.body
 
-if(!title || !description || !productTags|| !category || !productType || !city || !price || !imageUrl){
+if(!title || !description || !productTags|| !category || !productType || !city || !price || !imageUrl || !size){
     return res.Status(400).json({
         status: false,
         message: 'Input all fields'});
@@ -34,7 +34,8 @@ if(!store){
             city,
             store: store._id,
             price,
-            imageUrl
+            imageUrl,
+            size
         });
 
         await newProduct.save();
@@ -244,9 +245,66 @@ exports.getRandomProductsByCategory = async (req,res) => { //Another Home screen
 }
 
 //Update Product
+exports.updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.productId;
+
+        const { title,
+            description,
+            productTags,
+            productType,
+            category,
+            city,
+            price,
+            imageUrl,
+            size } = req.body;
+
+        const product = await Product.findById(productId);
+
+        if(!product) {
+            return res.status(404).json({
+                status: false,
+                message: "Product not found."
+            });
+        }
+
+        //update fields
+        product.title = title;     
+        product.description = description;
+        product.productTags = productTags;
+        product.productType = productType;
+        product.category = category;
+        product.city = city;
+        product.price = price;
+        product.imageUrl = imageUrl;
+        product.size = size;
+
+
+        //save updated product
+        await product.save();
+
+        return res.status(404).json({
+            status: true,
+            message: "Product updated successfully"
+        });
+
+    } catch (err) {
+        return res.status(404).json({
+            status: false,
+            message: err.message
+        });
+    }
+}
 
 
 //Delete Product
+exports.deleteProduct = async (req, res) => {
+    await Product.findByIdAndDelete(req.params.productId);
 
+    res.status(204).json({
+        status: 'success',
+        data: null
+    });
+}
 
-//Add counter to product to set products that are out of stock
+//Add counter to product to set products that are out of stock in order or checkout --> will comeback

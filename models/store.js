@@ -58,6 +58,11 @@ const storeSchema = new Schema({
         type: String,
         default: "Your store is under review. We wil notify you once it is verified."
     },
-})
+    deactivationDate: {
+        type: Date
+    }
+}, 
+    {timestamps: true},
+)
 
 module.exports = mongoose.model( 'Store', storeSchema);
