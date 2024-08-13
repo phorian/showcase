@@ -53,12 +53,15 @@ const userSchema = new Schema ({
     },
     address: {
         type: mongoose.Schema.Types.ObjectId,
-        reg: "Address",
+        ref: "Address",
         require: false
     },
     city: {
         type: String,
         required: true
+    },
+    walletId: {
+        type:String
     },
     active: {
         type: Boolean,

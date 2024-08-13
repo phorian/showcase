@@ -39,6 +39,15 @@ const storeSchema = new Schema({
         type: String,
         required: true
     },
+    accountNumber: {
+        type: String,
+    },
+    bankCode:{
+        type: String,
+    },
+    walletId: {
+        type: String,
+    },
     rating: {
         type: Number,
         min: 1,
