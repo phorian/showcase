@@ -69,11 +69,11 @@ exports.payMerchant = async (req, res) => {
             if(!acc[storeId]) {
                 acc[storeId] = {
                     store: item.storeId,
-                    totalAmount: 0,
+                    totalPrice: 0,
                     items: [],
                 };
             }
-            acc[storeId].totalAmount += item.productId.price * item.quantity;
+            acc[storeId].totalPrice += item.productId.price * item.quantity;
             acc[storeId].items.push(item);
             return acc;
         }, {});
@@ -82,17 +82,36 @@ exports.payMerchant = async (req, res) => {
         //Process payments for each store
 
         const transactions = Object.values(storePayments).map(async (storePayment) => {
-            const response = await flw.Transfer.initiate({
-                account_bank: storePayment.store.bankCode,
-                account_number: storePayment.store.walletId,  //flutterwave wallet 
-                amount: storePayment.totalAmount,
+
+            const originalAmount = storePayment.totalPrice;
+            const buyerAmount = originalAmount * 1.05; // Buyer pays 5% fee
+            const sellerAmount = originalAmount * 0.95; //Merchant pays 5% fee
+            const showcaseAmount = originalAmount * 0.10; //showcase fee
+
+            const storeResponse = await flw.Transfer.initiate({
+                account_bank: 'MPS', //change to flutterwave bank code
+                account_number: storePayment.store.walletId,  //Merchant flutterwave wallet 
+                amount: sellerAmount,
                 currency: 'NGN',
                 narration: `Payment for items from ${storePayment.store.title}`,
                 tx_ref: `ShwcseMrchnt{Date.now()}`,
                 debit_currency: 'NGN',
             });
 
-            return response.data
+            const showcaseResponse = await flw.Transfer.initiate({
+                account_bank: 'MPS', //change to flutterwave bank code
+                account_number: process.env.SHOWCASE_WALLET_ID,  //Merchant flutterwave wallet 
+                amount: showcaseAmount,
+                currency: 'NGN',
+                narration: `Showcase fee for items from ${storePayment.store.title}`,
+                tx_ref: `ShwcseMrchnt{Date.now()}`,
+                debit_currency: 'NGN',
+            });
+
+            return {
+                storeResponse: storeResponse.data,
+                showcaseResponse: showcaseResponse.data
+            }
     });
 
     const results = await Promise.all(transactions);
