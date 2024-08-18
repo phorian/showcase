@@ -6,6 +6,14 @@ const storeSchema = new Schema({
         type: String,
         required: true
     },
+    busnessEmail: {
+        type: String,
+        unique: true,
+        required: [true, 'Please enter email.'],
+        unique: true,
+        lowercase: true,
+        validate: [ validator.isEmail, 'Please enter a valid email.']
+    },
     time: {
         type: String,
         required: true
@@ -51,6 +59,11 @@ const storeSchema = new Schema({
     walletBalance: {
         type: Number,
         default: 0
+    },
+    walletType: {
+        type: String,
+        default: 'store',
+        required: true
     },
     rating: {
         type: Number,

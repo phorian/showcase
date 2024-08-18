@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { type } = require("os");
 
 const userSchema = new Schema ({
     username: {
@@ -66,6 +67,11 @@ const userSchema = new Schema ({
     walletBalance: {
         type: Number,
         default: 0
+    },
+    walletType: {
+        type: String,
+        default: 'user',
+        required: true
     },
     active: {
         type: Boolean,

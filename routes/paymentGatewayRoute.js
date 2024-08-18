@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const paymentGateway = require('../controllers/paymentGateway');
 const protectRoute = require("../middleware/protectRoute");
-const verifyRole = require("../middleware/verifyRole");
+//const verifyRole = require("../middleware/verifyRole");
 
 
-router.route('/createWallet').post(paymentGateway.createWallet);
-router.route('/payMerchant').post(paymentGateway.payMerchant);
-router.route('/withdraw').post(paymentGateway.withdrawBalance);
+router.route('/createUserWallet').post(protectRoute.verifyJWT, paymentGateway.createUserWallet);
+router.route('/createStoreWallet').post(protectRoute.verifyJWT, paymentGateway.createStoreWallet);
+router.route('/payMerchant').post(protectRoute.verifyJWT, paymentGateway.payMerchant);
+router.route('/withdraw').post(protectRoute.verifyJWT, paymentGateway.withdrawBalance);
 
 
 
