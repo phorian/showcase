@@ -308,3 +308,5 @@ exports.deleteProduct = async (req, res) => {
 }
 
 //Add counter to product to set products that are out of stock in order or checkout --> will comeback
+
+//Similar products

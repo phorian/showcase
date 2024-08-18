@@ -135,4 +135,37 @@ exports.payMerchant = async (req, res) => {
 exports.depositFund = async (req, res) => { }
 
 
-exports.withdrawBalance = async (req, res) => { }
+exports.withdrawBalance = async (req, res) => { 
+
+    const { account_bank, account_number, amount, narration } = req.body
+
+    if( !account_bank || !account_number || !amount) {
+        return res.status(400).json({
+            message: 'Please provide all required fields'
+        });
+    }
+
+    try {
+        const withdrawal = await flw.Transfer.initiate({
+            account_bank,
+            account_number,
+            amount,
+            currency: 'NGN',
+            narration: narration || 'Withdrawal from Showcase wallet',
+            reference: `ShwcseWthdrl{Date.now()}`,
+            debit_currency: 'NGN'
+        });
+
+        res.status(201).json({
+            status: 'success',
+            data: withdrawal.data
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: 'false',
+            message: err.message,
+        });
+    }
+}
+
+export

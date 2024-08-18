@@ -9,7 +9,7 @@ exports.createNewUser = async (req, res, next) => {
 
     //check if username or password has been input
     if(!username || !password || !email || !firstname || !lastname || !city || !phone || !address || !role) {
-        return res.status(400).json({'message': 'Input all fields'})
+        return res.status(400).json({message: 'Input all fields'});
     }
 
     //check for duplicate email in the db

@@ -48,6 +48,10 @@ const storeSchema = new Schema({
     walletId: {
         type: String,
     },
+    walletBalance: {
+        type: Number,
+        default: 0
+    },
     rating: {
         type: Number,
         min: 1,
